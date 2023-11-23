@@ -6,14 +6,13 @@
 <h1>Comics</h1>
 
 
-<div class="card mb-3">
-    <img src="{{$comics[0]->thumb}}" class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">{{$comics[0]->title}}</h5>
-      <p class="card-text">{{$comics[0]->artists}}</p>
-      <p class="card-text"><small class="text-body-secondary">{{$comics[0]->sale_date}}</small></p>
+<h1></h1>
+<div class="card text-bg-dark">
+    <img src="https://fumettologica.it/wp-content/uploads/2020/02/panini-dc-banner.jpg" class="card-img" alt="...">
+    <div class="card-img-overlay">
+        <h2 class="card-title text-center text-bg-dark ">Benvenuti nello store di DC Comics</h2>
+      <p class="card-text text-bg-dark"><small>Sono presenti : {{$num_comics}} Fumetti</small></p>
     </div>
   </div>
-
 
 @endsection
