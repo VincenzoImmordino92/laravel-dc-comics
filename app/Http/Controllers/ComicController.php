@@ -14,7 +14,7 @@ class ComicController extends Controller
      */
     public function index()
     {
-        $newComics = Comic::all();
+        $newComics = Comic::orderBy('id','desc')->paginate(10);
         return view('comics.index', compact('newComics'));
     }
 
@@ -38,9 +38,10 @@ class ComicController extends Controller
     {
         $comic_form_data = $request->all();
 
-        $form_comic = new Comic();
-        $form_comic->title = $comic_form_data['title'];
-        $form_comic->slug = Comic::generateSlug($comic_form_data['title']);
+        $form_new_comic = new Comic();
+
+       /*  $form_comic->title = $comic_form_data['title'];
+
         $form_comic->description = $comic_form_data['description'];
         $form_comic->thumb = $comic_form_data['thumb'];
         $form_comic->price = $comic_form_data['price'];
@@ -48,11 +49,14 @@ class ComicController extends Controller
         $form_comic->sale_date = $comic_form_data['sale_date'];
         $form_comic->type = $comic_form_data['type'];
         $form_comic->artists = $comic_form_data['artists'];
-        $form_comic->writers = $comic_form_data['writers'];
+        $form_comic->writers = $comic_form_data['writers']; */
 
-        $form_comic->save();
+        $comic_form_data['slug'] = Comic::generateSlug($comic_form_data['title']);
+        $form_new_comic->fill($comic_form_data);
 
-        return redirect()->route('comics.create');
+        $form_new_comic->save();
+
+        return redirect()->route('comics.show',$form_new_comic);
 
     }
 
@@ -62,9 +66,9 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Comic $comic)
     {
-        $comic = Comic::where('slug',$id)->first();
+       /*  $comic = Comic::where('slug',$id)->first(); */
         return view('comics.show', compact('comic'));
     }
 
@@ -74,9 +78,9 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Comic $comic)
     {
-        //
+        return view('comics.edit', compact('comic'));
     }
 
     /**
@@ -86,9 +90,18 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Comic $comic)
     {
+        $form_modifica_data = $request->all();
 
+        if($comic->title === $form_modifica_data['title']){
+            $form_modifica_data['slug'] = $comic->slug;
+        }else{
+        $form_modifica_data['slug'] = Comic::generateSlug($form_modifica_data['title']);
+        }
+        $comic->update($form_modifica_data);
+
+        return redirect()->route('comics.show', $comic);
     }
 
     /**
@@ -97,8 +110,10 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comic $comic)
     {
-        //
+        $comic->delete();
+
+        return redirect()->route('comics.index');
     }
 }

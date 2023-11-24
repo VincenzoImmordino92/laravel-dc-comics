@@ -13,6 +13,7 @@
         <th scope="col">Title</th>
         <th scope="col">price</th>
         <th scope="col">series</th>
+        <th scope="col">action</th>
 
       </tr>
     </thead>
@@ -23,14 +24,17 @@
         <td>{{$comic->title}}</td>
         <td>{{$comic->price}}</td>
         <td>{{$comic->series}}</td>
-        <td><a href="{{route('comics.show',$comic->slug)}}" class="btn btn-success"><i class="fa-solid fa-arrow-right"></i></a></td>
+        <td><a href="{{route('comics.show',$comic)}}" class="btn btn-success"><i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{route('comics.edit',$comic)}}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
+        @include('partials.comicDelete')
+        </td>
 
       </tr>
       @endforeach
     </tbody>
   </table>
 
-
+  {{ $newComics->links() }}
 
 
 
